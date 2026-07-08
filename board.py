@@ -1,5 +1,4 @@
 from pieces import Rook
-
 class ChesBoard:
     def __init__(self):
         # Khởi tạo bàn cờ 8x8 với tất cả ô trống (".")
@@ -28,3 +27,23 @@ class ChesBoard:
             output += row_str + "\n"
         
         return output
+
+    def move_piece(self, start_row, start_col, end_row, end_col):
+        # Kiểm tra ô bắt đầu có quân cờ không
+        selected_piece = self.matrix[start_row][start_col]
+        if selected_piece == ".":
+            return False
+        
+        # Kiểm tra ô kết thúc có nằm trong danh sách các nước đi hợp lệ của quân cờ không
+        valid_moves = selected_piece.get_valid_moves(self.matrix)
+
+        if (end_row, end_col) not in valid_moves:
+            # Thực hiện phép di chuyển quân cờ
+            self.matrix[end_row][end_col] = selected_piece # Thả quân cờ vào ô kết thúc
+            self.matrix[end_row][end_col].position = (end_row, end_col) # Cập nhật vị trí của quân cờ
+            self.matrix[start_row][start_col] = "." # Xóa quân cờ khỏi ô bắt đầu
+
+            return True
+
+        return False # Nước đi không hợp lệ
+            
